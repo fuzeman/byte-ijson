@@ -1,5 +1,5 @@
 dist: trusty
-sudo: false
+sudo: true
 language: python
 python:
   - 2.7
@@ -13,9 +13,11 @@ python:
   - nightly
 env:
   - BACKEND=python
-  - BACKEND=yajl
   - BACKEND=yajl2
   - BACKEND=yajl2-cffi
+before_install:
+  - sudo apt-get -qq update
+  - if [[ $BACKEND == yajl2* ]]; then sudo apt-get install -y libyajl2 libyajl-dev; fi
 install:
   - travis_retry pip install coveralls
   - travis_retry pip install tox-travis
