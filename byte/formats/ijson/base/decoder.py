@@ -56,7 +56,9 @@ class IterativeJsonDecoder(object):
         self.events = None
 
     @staticmethod
-    def _parse_container_start((key, event, _)):
+    def _parse_container_start(event):
+        key, event, _ = event
+
         if event not in ('start_map', 'start_array'):
             raise ValueError('Invalid container structure')
 
