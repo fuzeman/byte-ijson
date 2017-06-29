@@ -8,8 +8,6 @@ from byte.formats.json import JsonCollectionFormat
 class BaseIterativeJsonCollectionFormat(JsonCollectionFormat):
     """Iterative JSON (ijson) collection format."""
 
-    key = None
-
     class Meta(JsonCollectionFormat.Meta):
         """Iterative JSON (ijson) collection format metadata."""
 

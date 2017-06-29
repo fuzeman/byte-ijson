@@ -1,12 +1,10 @@
-"""Dynamic tests for memory collections."""
-
 from tests.base.core.fixtures import get_fixture_uri
 from tests.base.models.dynamic.album import Album
 from tests.base.models.dynamic.artist import Artist
 from tests.base.models.dynamic.city import City
 from tests.base.models.dynamic.track import Track
 
-from byte.collection import Collection
+from byte.table import Table
 from hamcrest import *
 import byte.compilers.operation
 import byte.executors.file
@@ -27,8 +25,8 @@ def test_all():
     if exc_info:
         six.reraise(*exc_info)
 
-    with get_fixture_uri('collections/artists.json') as artists_uri:
-        artists = Collection(Artist, artists_uri, plugins=[
+    with get_fixture_uri('databases/music/artists.json') as artists_uri:
+        artists = Table(Artist, artists_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
@@ -67,8 +65,8 @@ def test_create():
     if exc_info:
         six.reraise(*exc_info)
 
-    with get_fixture_uri('collections/artists.json') as artists_uri:
-        artists = Collection(Artist, artists_uri, plugins=[
+    with get_fixture_uri('databases/music/artists.json') as artists_uri:
+        artists = Table(Artist, artists_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
@@ -78,7 +76,7 @@ def test_create():
         artists.create(id=123, title='Fenech-Soler')
 
         # Fetch artist, and validate properties
-        assert_that(artists.get(123), has_properties({
+        assert_that(artists.get(Artist['id'] == 123), has_properties({
             'id': 123,
             'title': 'Fenech-Soler'
         }))
@@ -88,15 +86,15 @@ def test_get_basic():
     if exc_info:
         six.reraise(*exc_info)
 
-    with get_fixture_uri('collections/artists.json') as artists_uri:
-        artists = Collection(Artist, artists_uri, plugins=[
+    with get_fixture_uri('databases/music/artists.json') as artists_uri:
+        artists = Table(Artist, artists_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
         ])
 
         # Fetch artist, and validate properties
-        assert_that(artists.get(1), has_properties({
+        assert_that(artists.get(Artist['id'] == 1), has_properties({
             'id': 1,
             'title': 'Gorillaz'
         }))
@@ -107,23 +105,23 @@ def test_get_relations():
         six.reraise(*exc_info)
 
     with get_fixture_uri((
-        'collections/artists.json',
-        'collections/albums.json',
-        'collections/tracks.json'
+        'databases/music/artists.json',
+        'databases/music/albums.json',
+        'databases/music/tracks.json'
     )) as (
         artists_uri,
         albums_uri,
         tracks_uri
     ):
         # Artists
-        artists = Collection(Artist, artists_uri, plugins=[
+        artists = Table(Artist, artists_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
         ])
 
         # Albums
-        albums = Collection(Album, albums_uri, plugins=[
+        albums = Table(Album, albums_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
@@ -132,7 +130,7 @@ def test_get_relations():
         albums.connect(Album.Properties.artist, artists)
 
         # Tracks
-        tracks = Collection(Track, tracks_uri, plugins=[
+        tracks = Table(Track, tracks_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2
@@ -142,7 +140,7 @@ def test_get_relations():
         tracks.connect(Track.Properties.artist, artists)
 
         # Fetch track, and ensure relations can be resolved
-        assert_that(tracks.get(1), has_properties({
+        assert_that(tracks.get(Track['id'] == 1), has_properties({
             'id': 1,
             'title': 'Ascension (feat. Vince Staples)',
 
@@ -168,7 +166,7 @@ def test_where():
         six.reraise(*exc_info)
 
     with get_fixture_uri('collections/cities.json') as cities_uri:
-        cities = Collection(City, cities_uri, plugins=[
+        cities = Table(City, cities_uri, plugins=[
             byte.compilers.operation,
             byte.executors.file,
             byte.formats.ijson.yajl2

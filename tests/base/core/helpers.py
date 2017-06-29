@@ -1,4 +1,3 @@
-from six.moves import urllib, urllib_parse
 import os
 import shutil
 
@@ -17,10 +16,3 @@ def copy_tree(src, dst, symlinks=False, ignore=None):
             shutil.copytree(s, d, symlinks, ignore)
         else:
             shutil.copy2(s, d)
-
-
-def uri_from_path(path):
-    return urllib_parse.urljoin(
-        'file:',
-        urllib.request.pathname2url(str(path))[1:]
-    )

@@ -1,8 +1,7 @@
 from tests.base.models.dynamic.album import Album
 from tests.base.models.dynamic.artist import Artist
 
-from byte.model import Model
-from byte.property import Property
+from byte.table import Model, Property
 
 
 class Track(Model):

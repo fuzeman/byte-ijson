@@ -1,4 +1,5 @@
-from tests.base.core.helpers import FIXTURES_PATH, copy_tree, uri_from_path
+from byte.core.helpers.uri import uri_from_path
+from tests.base.core.helpers import FIXTURES_PATH, copy_tree
 
 from contextlib import contextmanager
 from tempfile import NamedTemporaryFile, mkdtemp

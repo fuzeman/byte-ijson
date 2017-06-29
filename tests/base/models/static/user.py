@@ -1,5 +1,4 @@
-from byte.model import Model
-from byte.property import Property
+from byte.table import Model, Property
 
 from datetime import datetime
 

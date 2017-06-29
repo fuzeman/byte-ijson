@@ -1,4 +1,4 @@
-"""JSON Decoder module."""
+"""byte-ijson - iterative json decoder module."""
 from __future__ import absolute_import, division, print_function
 
 from ijson.common import ObjectBuilder
