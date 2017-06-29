@@ -127,7 +127,9 @@ def test_get_relations():
             byte.formats.ijson.yajl2
         ])
 
-        albums.connect(Album.Properties.artist, artists)
+        albums.connect(
+            artist=artists
+        )
 
         # Tracks
         tracks = Table(Track, tracks_uri, plugins=[
@@ -136,8 +138,10 @@ def test_get_relations():
             byte.formats.ijson.yajl2
         ])
 
-        tracks.connect(Track.Properties.album, albums)
-        tracks.connect(Track.Properties.artist, artists)
+        tracks.connect(
+            artist=artists,
+            album=albums
+        )
 
         # Fetch track, and ensure relations can be resolved
         assert_that(tracks.get(Track['id'] == 1), has_properties({
