@@ -1,6 +1,7 @@
 dist: trusty
 sudo: true
 language: python
+
 python:
   - 2.7
   - 3.6
@@ -11,20 +12,34 @@ python:
   - 3.4
   - 3.5
   - nightly
+
 env:
   - BACKEND=python
   - BACKEND=yajl2
   - BACKEND=yajl2-cffi
+
 before_install:
   - sudo apt-get -qq update
   - if [[ $BACKEND == yajl2* ]]; then sudo apt-get install -y libyajl2 libyajl-dev; fi
 install:
-  - travis_retry pip install coveralls
-  - travis_retry pip install tox-travis
+  - travis_retry pip install --upgrade coveralls setuptools tox-travis wheel
   - if [[ $TRAVIS_PYTHON_VERSION != 'pypy'* ]]; then travis_retry pip install pyOpenSSL>=16.2.0; fi
 script:
   - export YAJL2_VERSION=">=2.0.0, <2.0.5"
   - tox
+  - if [[ $TRAVIS_PYTHON_VERSION != 'pypy3'* ]]; then
+      python setup.py bdist_wheel sdist;
+    else
+      python setup.py sdist;
+    fi
 after_success:
   - coveralls
-  - python setup.py bdist_wheel sdist
+
+jobs:
+  include:
+    - stage: lint
+      python: 2.7
+
+      install: travis_retry pip install tox
+      script: tox -e flake8
+      after_success: true
