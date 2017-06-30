@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 from byte.core.helpers.uri import uri_from_path
 from tests.base.core.helpers import FIXTURES_PATH, copy_tree
 
@@ -12,6 +14,14 @@ log = logging.getLogger(__name__)
 
 @contextmanager
 def get_fixture(path, copy=True):
+    """Retrieve fixture path.
+
+    :param path: Fixture path (relative to fixtures directory)
+    :type path: str
+
+    :param copy: Create a copy of the fixture
+    :type copy: bool
+    """
     source_path = os.path.abspath(os.path.join(FIXTURES_PATH, path))
 
     # Ensure fixture exists
@@ -45,6 +55,14 @@ def get_fixture(path, copy=True):
 
 @contextmanager
 def get_fixture_uri(path, copy=True):
+    """Retrieve fixture URI.
+
+    :param path: Fixture path (relative to fixtures directory)
+    :type path: str
+
+    :param copy: Create a copy of the fixture
+    :type copy: bool
+    """
     single = False
 
     if type(path) is not tuple:
@@ -53,8 +71,8 @@ def get_fixture_uri(path, copy=True):
 
     # Retrieve fixture generators
     fixtures = [
-        get_fixture(path, copy=copy)
-        for path in path
+        get_fixture(p, copy=copy)
+        for p in path
     ]
 
     # Yield fixture uris
@@ -77,6 +95,11 @@ def get_fixture_uri(path, copy=True):
 
 
 def copy_fixture_directory(source_path):
+    """Copy fixture directory.
+
+    :param source_path: Source path
+    :type source_path: str
+    """
     temp_path = mkdtemp()
 
     # Copy contents of `path` into temporary directory
@@ -87,6 +110,11 @@ def copy_fixture_directory(source_path):
 
 
 def copy_fixture_file(source_path):
+    """Copy fixture file.
+
+    :param source_path: Source path
+    :type source_path: str
+    """
     _, ext = os.path.splitext(source_path)
 
     # Create copy of fixture to temporary path

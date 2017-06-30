@@ -1,13 +1,15 @@
+from __future__ import absolute_import, division, print_function
+
+from byte.table import Table
 from tests.base.core.fixtures import get_fixture_uri
 from tests.base.models.dynamic.album import Album
 from tests.base.models.dynamic.artist import Artist
 from tests.base.models.dynamic.city import City
 from tests.base.models.dynamic.track import Track
-
-from byte.table import Table
-from hamcrest import *
 import byte.compilers.operation
 import byte.executors.file
+
+from hamcrest import *
 import pytest
 import six
 import sys
@@ -22,6 +24,7 @@ except ImportError:
 
 
 def test_all():
+    """Test all items are returned from a json-formatted table."""
     if exc_info:
         six.reraise(*exc_info)
 
@@ -62,6 +65,7 @@ def test_all():
 
 
 def test_create():
+    """Test items can be created on a json-formatted table."""
     if exc_info:
         six.reraise(*exc_info)
 
@@ -83,6 +87,7 @@ def test_create():
 
 
 def test_get_basic():
+    """Test items can be retrieved from a json-formatted table."""
     if exc_info:
         six.reraise(*exc_info)
 
@@ -101,6 +106,7 @@ def test_get_basic():
 
 
 def test_get_relations():
+    """Test relations can be resolved in a json-formatted table."""
     if exc_info:
         six.reraise(*exc_info)
 
@@ -166,6 +172,7 @@ def test_get_relations():
 
 
 def test_where():
+    """Test a json-formatted table can be filtered with expressions."""
     if exc_info:
         six.reraise(*exc_info)
 
