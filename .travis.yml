@@ -13,20 +13,15 @@ python:
   - 3.5
   - nightly
 
-env:
-  - BACKEND=python
-  - BACKEND=yajl2
-  - BACKEND=yajl2-cffi
-
 before_install:
   - sudo apt-get -qq update
-  - if [[ $BACKEND == yajl2* ]]; then sudo apt-get install -y libyajl2 libyajl-dev; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2'* ]]; then sudo apt-get install -y libyajl2 libyajl-dev; fi
 install:
   - travis_retry pip install --upgrade coveralls setuptools tox-travis wheel
   - if [[ $TRAVIS_PYTHON_VERSION != 'pypy'* ]]; then travis_retry pip install pyOpenSSL>=16.2.0; fi
 script:
   - export YAJL2_VERSION=">=2.0.0, <2.0.5"
-  - if [[ $TRAVIS_PYTHON_VERSION == '2'* ]] || [[ $BACKEND == 'python' ]]; then tox; fi
+  - tox
   - if [[ $TRAVIS_PYTHON_VERSION != 'pypy3'* ]]; then
       python setup.py bdist_wheel sdist;
     else
