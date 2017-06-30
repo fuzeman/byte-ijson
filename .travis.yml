@@ -26,7 +26,7 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION != 'pypy'* ]]; then travis_retry pip install pyOpenSSL>=16.2.0; fi
 script:
   - export YAJL2_VERSION=">=2.0.0, <2.0.5"
-  - tox
+  - if [[ $TRAVIS_PYTHON_VERSION == '2'* ]] || [[ $BACKEND == 'python' ]]; then tox; fi
   - if [[ $TRAVIS_PYTHON_VERSION != 'pypy3'* ]]; then
       python setup.py bdist_wheel sdist;
     else
